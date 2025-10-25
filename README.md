@@ -1,15 +1,17 @@
 # GroundingSam2-Custom
 
-A clean, simplified repository for GroundingDINO + SAM 2 inference with local models. This repository provides easy-to-use image segmentation and video object tracking capabilities without requiring API tokens or external services.
+A comprehensive repository for GroundingDINO + SAM 2 inference with local models. Features image segmentation, video object tracking, unified demo interface, and interactive Streamlit web app.
 
 ## 🚀 Features
 
 - **Image Segmentation**: Segment objects in images using natural language descriptions
 - **Video Object Tracking**: Track objects across video frames with consistent IDs
+- **Unified Demo Interface**: Single script for images, videos, and batch processing
+- **Interactive Web App**: Streamlit interface with model selection and visualization
+- **Model Download Script**: Download-only script for model weights
 - **Local Models Only**: No API keys or external dependencies required
-- **Multiple Model Sizes**: Choose from tiny, small, base+, or large models based on your needs
-- **Jupyter Notebooks**: Interactive examples for learning and experimentation
-- **Easy Installation**: One-command setup with automatic model downloads
+- **Multiple Model Sizes**: Choose from tiny, small, base+, or large models
+- **Command-line Interface**: Flexible parameter control for all features
 
 ## 📋 Prerequisites
 
@@ -47,39 +49,58 @@ That's it! The script will automatically:
 
 ## 🎯 Usage
 
-### Image Segmentation
+### 1. Unified Demo Interface (Recommended)
 
 ```bash
-python grounded_sam2_local_demo.py
+# Image segmentation
+python demo.py --input image.jpg --text "car. person."
+
+# Video tracking
+python demo.py --input video.mp4 --text "hippopotamus." --mode video
+
+# Batch processing folder
+python demo.py --input /path/to/folder --text "dog. cat." --mode batch
+
+# Custom models and settings
+python demo.py --input image.jpg --text "car." \
+  --sam2-model large --gdino-model swinb \
+  --box-threshold 0.3 --output-dir my_results
 ```
 
-This will:
-- Load a sample image
-- Detect objects using GroundingDINO
-- Segment them using SAM 2
-- Save results to `outputs/grounded_sam2_local_demo/`
-
-### Video Object Tracking
+### 2. Interactive Web App
 
 ```bash
-python grounded_sam2_tracking_demo_custom_video_input_gd1.0_local_model.py
+# Launch Streamlit app
+bash run_streamlit.sh
+# OR
+streamlit run streamlit_app.py
 ```
 
-This will:
-- Process a sample video
-- Track objects across frames
-- Generate tracking results
-- Save output video to `tracking_results/`
+Features:
+- Upload images/videos or select folders
+- Model selection with performance indicators
+- Adjustable detection thresholds (default 0.25)
+- 17 predefined object classes + custom classes
+- Side-by-side input/output visualization
+- JSON results display
 
-### Jupyter Notebooks
+### 3. Individual Demo Scripts
 
 ```bash
-jupyter notebook notebooks/
+# Image segmentation
+python grounded_sam2_local_demo.py --sam2-model large --gdino-model swinb
+
+# Video tracking
+python grounded_sam2_tracking_demo_custom_video_input_gd1.0_local_model.py \
+  --sam2-model large --gdino-model swinb --text "person. car."
 ```
 
-Available notebooks:
-- `image_predictor_example.ipynb` - Image segmentation tutorial
-- `video_predictor_example.ipynb` - Video tracking tutorial
+### 4. Model Download Only
+
+```bash
+# Download models without installing dependencies
+bash download_models.sh
+```
 
 ## 📁 Directory Structure
 
@@ -88,25 +109,20 @@ GroundingSam2-Custom/
 ├── sam2/                          # SAM 2 core package
 ├── grounding_dino/                # GroundingDINO core package
 ├── utils/                         # Utility scripts
-├── notebooks/                     # Jupyter notebooks and examples
-│   ├── image_predictor_example.ipynb
-│   ├── video_predictor_example.ipynb
-│   ├── images/                    # Sample images
-│   └── videos/bedroom/           # Sample video frames
-├── assets/                       # Example assets
-│   ├── hippopotamus.mp4
-│   └── tracking_car_1.jpg
-├── checkpoints/                  # SAM 2.1 model weights (downloaded by install.sh)
+├── checkpoints/                  # SAM 2.1 model weights
 │   ├── sam2.1_hiera_tiny.pt      # 156 MB
-│   ├── sam2.1_hiera_small.pt    # 184 MB
+│   ├── sam2.1_hiera_small.pt     # 184 MB
 │   ├── sam2.1_hiera_base_plus.pt # 323 MB
 │   └── sam2.1_hiera_large.pt     # 898 MB (best quality)
-├── gdino_checkpoints/            # GroundingDINO model weights (downloaded by install.sh)
+├── gdino_checkpoints/            # GroundingDINO model weights
 │   ├── groundingdino_swint_ogc.pth      # 693 MB
 │   └── groundingdino_swinb_cogcoor.pth  # 938 MB (best quality)
 ├── outputs/                      # Generated outputs
-├── tracking_results/            # Video tracking results
-├── install.sh                   # Installation script
+├── install.sh                   # Complete installation script
+├── download_models.sh            # Model download only
+├── demo.py                       # Unified demo interface
+├── streamlit_app.py             # Interactive web app
+├── run_streamlit.sh             # Streamlit launcher
 ├── grounded_sam2_local_demo.py  # Image segmentation demo
 └── grounded_sam2_tracking_demo_custom_video_input_gd1.0_local_model.py  # Video tracking demo
 ```
